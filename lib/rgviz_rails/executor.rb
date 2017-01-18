@@ -185,15 +185,14 @@ module Rgviz
         end
       end
 
-      results = @model_class.send :find,
-        :all,
-        :select => @selects.join(','),
-        :conditions => conditions,
-        :group => @group,
-        :order => @order,
-        :limit => @query.limit,
-        :offset => @query.offset,
-        :joins => @joins
+      results = @model_class
+        .select(@selects.join(','))
+        .where(conditions)
+        .group(@group)
+        .order(@order)
+        .limit(@query.limit)
+        .offset(@query.offset)
+        .joins(@joins)
 
       if @pivots.empty? || results.empty?
         @table.cols = @table.cols[0 ... @max_before_pivot_columns] if @pivots.present?
